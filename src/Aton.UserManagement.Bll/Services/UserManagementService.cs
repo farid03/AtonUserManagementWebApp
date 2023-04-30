@@ -1,4 +1,6 @@
-﻿using Aton.UserManagement.Bll.Services.Interfaces;
+﻿using System.Security.Cryptography;
+using Aton.UserManagement.Bll.Models;
+using Aton.UserManagement.Bll.Services.Interfaces;
 using Aton.UserManagement.Dal.Entities;
 using Aton.UserManagement.Dal.Repositories;
 using Aton.UserManagement.Dal.Repositories.Interfaces;
@@ -14,29 +16,53 @@ public class UserManagementService : IUserManagementService
     {
         _usersRepository = usersRepository;
     }
-    
+
     public async Task<int> Create(
-        string ownerLogin,
+        string principalLogin,
         UserModel user,
-        CancellationToken cancellationToken
-    )
+        CancellationToken cancellationToken)
     {
         using var transaction = _usersRepository.CreateTransactionScope();
 
         var newUser = new Dal.Models.UserModel()
         {
             Login = user.Login,
-            Password = user.Password,
+            Password = ComputeHash(user.Password),
             Name = user.Name,
             Gender = user.Gender,
             Birthday = user.Birthday,
             Admin = user.Admin,
         };
 
-        var guid = await _usersRepository.Add(ownerLogin, newUser, cancellationToken);
+        var guid = await _usersRepository.Add(principalLogin, newUser, cancellationToken);
 
         transaction.Complete();
 
         return guid;
+    }
+
+    public async Task<bool> IsLoginFree(
+        string login,
+        CancellationToken cancellationToken)
+    {
+        using var transaction = _usersRepository.CreateTransactionScope();
+        var user = await _usersRepository.Get(login, cancellationToken);
+        transaction.Complete();
+
+        if (user is not null)
+            return true;
+
+        return false;
+    }
+    
+    private string ComputeHash(string inputString)
+    {
+        using var md5 = MD5.Create();
+
+        var data = System.Text.Encoding.ASCII.GetBytes(inputString);
+        data = md5.ComputeHash(data);
+        var hash = Convert.ToBase64String(data);
+
+        return hash;
     }
 }

@@ -8,13 +8,25 @@ public class CreateUserRequestValidator : AbstractValidator<CreateUserRequest>
 // TODO добавить валидаторы на все (на основе того, что написано в тз)
     public CreateUserRequestValidator()
     {
-        // RuleFor(x => x.UserId)
-        //     .GreaterThan(0);
-        //
-        // RuleFor(x => x.Goods)
-        //     .NotEmpty();
-        //
-        // RuleForEach(x => x.Goods)
-        //     .SetValidator(new CalculateRequestGoodPropertiesValidator());
+        var msg = "Ошибка в поле {PropertyName}: значение {PropertyValue}";
+        
+        RuleFor(x => x.UserToCreate.Login)
+            .Length(1, 30)
+            .Matches(@"^[a-zA-Z0-9]+$")
+            .WithMessage(msg);
+
+        RuleFor(x => x.UserToCreate.Password)
+            .Length(1, 30)
+            .Matches(@"^[a-zA-Z0-9]+$")
+            .WithMessage(msg);
+        
+        RuleFor(x => x.UserToCreate.Name)
+            .Length(1, 30)
+            .Matches(@"^[a-zA-Zа-яА-Я]+$")
+            .WithMessage(msg);
+
+        RuleFor(x => x.UserToCreate.Gender)
+            .InclusiveBetween(0, 1)
+            .WithMessage(msg);
     }
 }

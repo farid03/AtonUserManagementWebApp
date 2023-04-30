@@ -18,7 +18,7 @@ public interface IUsersRepository : IDbRepository
     Task<UserEntityV1[]> GetAllUsers(
         CancellationToken token);
 
-    Task<UserEntityV1[]> Get(
+    Task<UserEntityV1?> Get(
         string login,
         CancellationToken token);
 

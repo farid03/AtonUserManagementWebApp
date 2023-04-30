@@ -1,8 +1,9 @@
+using Aton.UserManagement.Api.Requests.V1.Common;
+
 namespace Aton.UserManagement.Api.Requests.V1;
 
 public record CreateUserRequest(
-    string Login,
-    string Password,
+    Principal Principal,
     CreateUserRequest.User UserToCreate
 )
 {

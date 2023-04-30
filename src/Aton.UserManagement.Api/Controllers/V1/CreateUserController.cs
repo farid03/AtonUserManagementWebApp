@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aton.UserManagement.Api.Controllers.V1;
+
 // TODO добавить мидлвейр авторизации
 // TODO добавить мидлвейр хеширования паролей
 [ApiController]
@@ -33,9 +34,13 @@ public class CreateUserController : ControllerBase
             request.UserToCreate.Birthday,
             request.UserToCreate.Admin
         );
-        
-        var command = new CreateUserCommand(request.Login, user);
-            
+
+        var command = new CreateUserCommand(
+            new Principal(
+                request.Principal.Login,
+                request.Principal.Password
+            ), user);
+
         var result = await _mediator.Send(command, token);
 
         return new CreateResponse(result);

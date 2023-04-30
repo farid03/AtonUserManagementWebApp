@@ -20,13 +20,17 @@ public class ExceptionHandlerMiddleware
         catch (Exception exception)
         {
             var response = context.Response;
-            if (exception is UserNotFoundException)
+            if (exception is UserNotFoundException or LoginAlreadyExistsException or InvalidPrincipalCreditsException)
                 response.StatusCode = 400;
+            if (exception is ForbiddenException)
+                response.StatusCode = 403;
             else
                 response.StatusCode = 500;
             
             context.Response.ContentType = "text/plain";
             await response.WriteAsync($"{exception.GetType().FullName} {exception.Message}");
+            
+            // throw;
         }
     }
 }
