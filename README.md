@@ -16,15 +16,18 @@ Web API сервис реализующий API методы CRUD над
 
 ## Сборка и запуск
 
-Web API: [status: in development]
+Базы данных:
 ```shell
 docker compose up -d
+```
+
+Web API: [status: in development]
+```shell
 dotnet run --project src/Aton.UserManagement.Api/Aton.UserManagement.Api.csproj
 ```
 
 gRPC API: [status: in development]
 ```shell
-docker compose up -d
 dotnet run --project src/Aton.UserManagement.Api/Aton.UserManagement.gRPC.Api.csproj
 ```
 
