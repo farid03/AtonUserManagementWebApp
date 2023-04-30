@@ -13,6 +13,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aton.UserManagement.Bll", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aton.UserManagement.gRPC.Api", "src\Aton.UserManagement.gRPC.Api\Aton.UserManagement.gRPC.Api.csproj", "{B0C82FB9-3CE9-4A48-99AF-301D45947B78}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{BD08B317-F09B-4C4F-9552-CD4323D3610F}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
