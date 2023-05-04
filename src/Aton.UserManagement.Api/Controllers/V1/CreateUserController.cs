@@ -7,8 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Aton.UserManagement.Api.Controllers.V1;
 
-// TODO добавить мидлвейр авторизации
-// TODO добавить мидлвейр хеширования паролей
 [ApiController]
 [Route("/v1/create")]
 public class CreateUserController : ControllerBase
@@ -28,11 +26,12 @@ public class CreateUserController : ControllerBase
     {
         var user = new UserModel(
             request.UserToCreate.Login,
-            request.UserToCreate.Password, // TODO не забыть хешировать
+            request.UserToCreate.Password,
             request.UserToCreate.Name,
             request.UserToCreate.Gender,
             request.UserToCreate.Birthday,
-            request.UserToCreate.Admin
+            request.UserToCreate.Admin,
+            true
         );
 
         var command = new CreateUserCommand(

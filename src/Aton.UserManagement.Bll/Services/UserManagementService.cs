@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography;
+using Aton.UserManagement.Bll.Exceptions;
 using Aton.UserManagement.Bll.Models;
 using Aton.UserManagement.Bll.Services.Interfaces;
 using Aton.UserManagement.Dal.Entities;
@@ -49,12 +50,77 @@ public class UserManagementService : IUserManagementService
         var user = await _usersRepository.Get(login, cancellationToken);
         transaction.Complete();
 
-        if (user is not null)
-            return true;
+        return user is null;
+    }
 
-        return false;
+    public async Task<UserModel?> GetUserByLogin(string login, CancellationToken cancellationToken)
+    {
+        using var transaction = _usersRepository.CreateTransactionScope();
+        var user = await _usersRepository.Get(login, cancellationToken);
+        transaction.Complete();
+
+        if (user is null)
+            return null;
+
+        var result = new UserModel(
+            user.Login,
+            user.Password,
+            user.Name,
+            user.Gender,
+            user.Birthday,
+            user.Admin,
+            user.RevokedOn is null
+        );
+
+        return result;
     }
     
+    public async Task<UserModel[]> GetActiveUsers(CancellationToken cancellationToken)
+    {
+        using var transaction = _usersRepository.CreateTransactionScope();
+        var users = await _usersRepository.GetAllActiveUsers(cancellationToken);
+        transaction.Complete();
+
+        var result = users
+            .Select( x => 
+                new UserModel(
+                    x.Login, 
+                    x.Password, 
+                    x.Name, 
+                    x.Gender, 
+                    x.Birthday, 
+                    x.Admin, 
+                    x.RevokedOn is null
+                    )
+            )
+            .ToArray();
+
+        return result;
+    }
+    
+    public async Task<UserModel[]> GetOlderThan(int age, CancellationToken cancellationToken)
+    {
+        using var transaction = _usersRepository.CreateTransactionScope();
+        var users = await _usersRepository.GetOlderThan(age, cancellationToken);
+        transaction.Complete();
+
+        var result = users
+            .Select( x => 
+                new UserModel(
+                    x.Login, 
+                    x.Password, 
+                    x.Name, 
+                    x.Gender, 
+                    x.Birthday, 
+                    x.Admin, 
+                    x.RevokedOn is null
+                )
+            )
+            .ToArray();
+
+        return result;
+    }
+
     private string ComputeHash(string inputString)
     {
         using var md5 = MD5.Create();

@@ -18,13 +18,13 @@ public record UserEntityV1
 
     public DateTime CreatedOn { get; init; }
     
-    public string CreatedBy { get; init; }
+    public string? CreatedBy { get; init; }
     
-    public DateTime ModifiedOn { get; init; }
+    public DateTime? ModifiedOn { get; init; }
     
-    public string ModifiedBy { get; init; }
+    public string? ModifiedBy { get; init; }
     
-    public DateTime RevokedOn { get; init; }
+    public DateTime? RevokedOn { get; init; }
     
-    public string RevokedBy { get; init; }
+    public string? RevokedBy { get; init; }
 }

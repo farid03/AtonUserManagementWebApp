@@ -33,7 +33,7 @@ public class CreateUserCommandHandler
         if (!await _authorizationService.IsAdminUser(command.Principal, cancellationToken))
             throw new ForbiddenException();
 
-        if (await _userManagementService.IsLoginFree(command.User.Login, cancellationToken))
+        if (!await _userManagementService.IsLoginFree(command.User.Login, cancellationToken))
             throw new LoginAlreadyExistsException();
 
         var user = new UserModel(
@@ -42,7 +42,8 @@ public class CreateUserCommandHandler
             command.User.Name,
             command.User.Gender,
             command.User.Birthday,
-            command.User.Admin
+            command.User.Admin,
+            command.User.IsActive
         );
 
         var userId = await _userManagementService.Create(

@@ -42,6 +42,20 @@ public class AuthorizationService
         
         return user is not null && IsPasswordEqual(principal.Password, user.Password);
     }
+    
+    public async Task<bool> IsActivePrincipal(
+        Principal principal,
+        CancellationToken cancellationToken)
+    {
+        using var transaction = _usersRepository.CreateTransactionScope();
+        var user = await _usersRepository.Get(principal.Login, cancellationToken);
+        transaction.Complete();
+
+        if (user is null || !IsPasswordEqual(principal.Password, user.Password))
+            throw new InvalidPrincipalCreditsException();
+        
+        return user.RevokedOn is null;
+    }
 
     private bool IsPasswordEqual(string password, string passwordHash)
     {

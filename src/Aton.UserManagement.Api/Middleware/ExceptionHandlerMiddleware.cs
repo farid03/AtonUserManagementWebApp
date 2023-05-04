@@ -29,8 +29,6 @@ public class ExceptionHandlerMiddleware
             
             context.Response.ContentType = "text/plain";
             await response.WriteAsync($"{exception.GetType().FullName} {exception.Message}");
-            
-            // throw;
         }
     }
 }

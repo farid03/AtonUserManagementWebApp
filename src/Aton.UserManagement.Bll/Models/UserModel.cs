@@ -6,5 +6,6 @@ public record UserModel(
     string Name,
     int Gender,
     DateTime? Birthday,
-    bool Admin
+    bool Admin,
+    bool IsActive
 );

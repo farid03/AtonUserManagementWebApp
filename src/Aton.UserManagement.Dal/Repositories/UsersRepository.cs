@@ -15,83 +15,6 @@ public class UsersRepository : BaseRepository, IUsersRepository
     {
     }
 
-//     public async Task<long[]> Add(
-//         GoodEntityV1[] goods,
-//         CancellationToken token)
-//     {
-//         const string sqlQuery = @"
-// insert into goods (user_id, width, height, length, weight) 
-// select user_id, width, height, length, weight
-//   from UNNEST(@Goods)
-// returning id;
-// ";
-//
-//         var sqlQueryParams = new
-//         {
-//             Goods = goods
-//         };
-//
-//         await using var connection = await GetAndOpenConnection();
-//         var ids = await connection.QueryAsync<long>(
-//             new CommandDefinition(
-//                 sqlQuery,
-//                 sqlQueryParams,
-//                 cancellationToken: token));
-//
-//         return ids
-//             .ToArray();
-//     }
-//
-//     public async Task<GoodEntityV1[]> Query(
-//         long userId,
-//         CancellationToken token)
-//     {
-//         const string sqlQuery = @"
-// select id
-//      , user_id
-//      , width
-//      , height
-//      , length
-//      , weight
-//   from goods
-//  where user_id = @UserId;
-// ";
-//
-//         var sqlQueryParams = new
-//         {
-//             UserId = userId
-//         };
-//
-//         await using var connection = await GetAndOpenConnection();
-//         var goods = await connection.QueryAsync<GoodEntityV1>(
-//             new CommandDefinition(
-//                 sqlQuery,
-//                 sqlQueryParams,
-//                 cancellationToken: token));
-//
-//         return goods
-//             .ToArray();
-//     }
-//
-//     public async Task Delete(long[] goodsIds, CancellationToken cancellationToken)
-//     {
-//         const string sqlQuery = @"
-//  delete from goods where id = any(@GoodsIds);
-// ";
-//         await using var connection = await GetAndOpenConnection();
-//
-//         var sqlQueryParams = new
-//         {
-//             GoodsIds = goodsIds
-//         };
-//
-//         await connection.QueryAsync(
-//             new CommandDefinition(
-//                 sqlQuery,
-//                 sqlQueryParams,
-//                 cancellationToken: cancellationToken));
-//     }
-
     public async Task<int> Add(string ownerLogin, UserModel user, CancellationToken token)
     {
         const string sqlQuery = @"
@@ -125,9 +48,28 @@ returning guid;
         throw new NotImplementedException();
     }
 
-    public Task<UserEntityV1[]> GetAllUsers(CancellationToken token)
+    public async Task<UserEntityV1[]> GetAllActiveUsers(CancellationToken token)
     {
-        throw new NotImplementedException();
+        const string sqlQuery = @"
+select
+    login,
+    password,
+    name,
+    gender,
+    birthday,
+    admin,
+    revoked_on
+from aton_user 
+where revoked_on is null
+order by created_on
+";
+        await using var connection = await GetAndOpenConnection();
+        var user = await connection.QueryAsync<UserEntityV1>(
+            new CommandDefinition(
+                sqlQuery,
+                cancellationToken: token));
+
+        return user.ToArray();
     }
 
     public async Task<UserEntityV1?> Get(string login, CancellationToken token)
@@ -139,7 +81,8 @@ select
     name,
     gender,
     birthday,
-    admin
+    admin,
+    revoked_on
 from aton_user 
 where login = @Login
 ";
@@ -155,12 +98,37 @@ where login = @Login
                 sqlQueryParams,
                 cancellationToken: token));
 
-        return user.FirstOrDefault((UserEntityV1?) null);    
+        return user.FirstOrDefault((UserEntityV1?)null);
     }
 
-    public Task<UserEntityV1[]> GetOlderThan(int age, CancellationToken token)
+    public async Task<UserEntityV1[]> GetOlderThan(int age, CancellationToken token)
     {
-        throw new NotImplementedException();
+        const string sqlQuery = @"
+select
+    login,
+    password,
+    name,
+    gender,
+    birthday,
+    admin,
+    revoked_on
+from aton_user
+where extract(year from age(CURRENT_TIMESTAMP, birthday)) >= @LimitAge
+order by created_on
+";
+        var sqlQueryParams = new
+        {
+            LimitAge = age,
+        };
+        
+        await using var connection = await GetAndOpenConnection();
+        var user = await connection.QueryAsync<UserEntityV1>(
+            new CommandDefinition(
+                sqlQuery,
+                sqlQueryParams,
+                cancellationToken: token));
+
+        return user.ToArray();
     }
 
     public Task Delete(string login, CancellationToken cancellationToken)
