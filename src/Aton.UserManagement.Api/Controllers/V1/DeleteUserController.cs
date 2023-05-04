@@ -19,11 +19,36 @@ public class DeleteUserController : ControllerBase
     {
         _mediator = mediator;
     }
-    
-    [HttpPost]
-    public async Task<CreateResponse> Delete(
+
+    [HttpDelete("soft")]
+    public async Task SoftDelete(
+        SoftDeleteRequest request,
         CancellationToken ct)
     {
-        throw new NotImplementedException();
+        var query = new SoftDeleteUserCommand(
+            new Principal(
+                request.Principal.Login,
+                request.Principal.Password
+            ),
+            request.UserLogin
+        );
+
+        await _mediator.Send(query, ct);
+    }
+
+    [HttpDelete("hard")]
+    public async Task HardDelete(
+        HardDeleteRequest request,
+        CancellationToken ct)
+    {
+        var query = new HardDeleteUserCommand(
+            new Principal(
+                request.Principal.Login,
+                request.Principal.Password
+            ),
+            request.UserLogin
+        );
+
+        await _mediator.Send(query, ct);
     }
 }

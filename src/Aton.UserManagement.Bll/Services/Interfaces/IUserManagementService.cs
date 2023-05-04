@@ -9,4 +9,6 @@ public interface IUserManagementService
     Task<UserModel?> GetUserByLogin(string login, CancellationToken cancellationToken);
     Task<UserModel[]> GetActiveUsers(CancellationToken cancellationToken);
     Task<UserModel[]> GetOlderThan(int age, CancellationToken cancellationToken);
+    Task Delete(string login, CancellationToken cancellationToken);
+    Task Revoke(string revokerLogin, string login, CancellationToken cancellationToken);
 }

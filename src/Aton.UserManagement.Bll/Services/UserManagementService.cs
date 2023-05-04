@@ -121,6 +121,20 @@ public class UserManagementService : IUserManagementService
         return result;
     }
 
+    public async Task Delete(string login, CancellationToken cancellationToken)
+    {
+        using var transaction = _usersRepository.CreateTransactionScope();
+        await _usersRepository.Delete(login, cancellationToken);
+        transaction.Complete();
+    }
+    
+    public async Task Revoke(string revokerLogin, string login, CancellationToken cancellationToken)
+    {
+        using var transaction = _usersRepository.CreateTransactionScope();
+        await _usersRepository.Revoke(revokerLogin, login, cancellationToken);
+        transaction.Complete();
+    }
+
     private string ComputeHash(string inputString)
     {
         using var md5 = MD5.Create();

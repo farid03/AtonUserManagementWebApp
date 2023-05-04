@@ -120,7 +120,7 @@ order by created_on
         {
             LimitAge = age,
         };
-        
+
         await using var connection = await GetAndOpenConnection();
         var user = await connection.QueryAsync<UserEntityV1>(
             new CommandDefinition(
@@ -131,14 +131,47 @@ order by created_on
         return user.ToArray();
     }
 
-    public Task Delete(string login, CancellationToken cancellationToken)
+    public async Task Delete(string login, CancellationToken token)
     {
-        throw new NotImplementedException();
+        const string sqlQuery = @"
+delete from aton_user
+where login = @Login
+";
+        var sqlQueryParams = new
+        {
+            Login = login,
+        };
+
+        await using var connection = await GetAndOpenConnection();
+
+        await connection.QueryAsync(
+            new CommandDefinition(
+                sqlQuery,
+                sqlQueryParams,
+                cancellationToken: token));
     }
 
-    public Task Revoke(string login, CancellationToken cancellationToken)
+    public async Task Revoke(string revokerLogin, string login, CancellationToken token)
     {
-        throw new NotImplementedException();
+        const string sqlQuery = @"
+update 
+    aton_user set revoked_on = CURRENT_TIMESTAMP, 
+                  revoked_by = @RevokerLogin
+where login = @Login
+";
+        var sqlQueryParams = new
+        {
+            Login = login,
+            RevokerLogin = revokerLogin,
+        };
+
+        await using var connection = await GetAndOpenConnection();
+
+        await connection.QueryAsync(
+            new CommandDefinition(
+                sqlQuery,
+                sqlQueryParams,
+                cancellationToken: token));
     }
 
     public Task<int> Restore(string login, CancellationToken token)

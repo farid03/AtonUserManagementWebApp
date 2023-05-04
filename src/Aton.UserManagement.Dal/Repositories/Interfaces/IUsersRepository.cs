@@ -31,6 +31,7 @@ public interface IUsersRepository : IDbRepository
         CancellationToken cancellationToken);
 
     Task Revoke( // soft delete
+        string revokerLogin,
         string login,
         CancellationToken cancellationToken);
     
