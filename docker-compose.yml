@@ -1,9 +1,9 @@
 version: "3"
 services:
-  price-calculator-local:
+  aton-user-management-local:
     image: postgres
     restart: always
-    container_name: aton-user-management-local
+    container_name: aton-db-local
     environment:
       POSTGRES_USER: "postgres"
       POSTGRES_DB: "user-manager"
