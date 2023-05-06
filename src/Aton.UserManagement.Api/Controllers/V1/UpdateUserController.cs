@@ -18,7 +18,7 @@ public class UpdateUserController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpPost("info")]
+    [HttpPatch("info")]
     public async Task UpdateUserInfo(
         UpdateUserInfoRequest request,
         CancellationToken ct)
@@ -37,7 +37,7 @@ public class UpdateUserController : ControllerBase
         await _mediator.Send(query, ct);
     }
 
-    [HttpPost("login")]
+    [HttpPatch("login")]
     public async Task UpdateUserLogin(
         UpdateUserLoginRequest request,
         CancellationToken ct)
@@ -54,7 +54,7 @@ public class UpdateUserController : ControllerBase
         await _mediator.Send(query, ct);
     }
 
-    [HttpPost("password")]
+    [HttpPatch("password")]
     public async Task UpdateUserPassword(
         UpdateUserPasswordRequest request,
         CancellationToken ct)
