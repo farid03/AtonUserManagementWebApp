@@ -17,8 +17,8 @@ public class UsersRepository : BaseRepository, IUsersRepository
     public async Task<int> Add(string ownerLogin, UserModel user, CancellationToken token)
     {
         const string sqlQuery = @"
-INSERT INTO aton_user (login, password, name, gender, birthday, admin, created_on, created_by)
-VALUES (@Login, @Password, @Name, @Gender, @Birthday, @Admin, CURRENT_TIMESTAMP, @CreatedBy)
+insert into aton_user (login, password, name, gender, birthday, admin, created_on, created_by)
+values (@Login, @Password, @Name, @Gender, @Birthday, @Admin, CURRENT_TIMESTAMP, @CreatedBy)
 returning guid;
 ";
         var sqlQueryParams = new
@@ -52,8 +52,7 @@ returning guid;
     {
         const string sqlQuery = @"
 update 
-    aton_user set 
-                  name = @Name,
+    aton_user set name = @Name,
                   gender = @Gender,
                   birthday = @Birthday,
                   modified_on = CURRENT_TIMESTAMP,
@@ -86,8 +85,7 @@ where login = @Login
     {
         const string sqlQuery = @"
 update 
-    aton_user set 
-                  password = @Password,
+    aton_user set password = @Password,
                   modified_on = CURRENT_TIMESTAMP,
                   modified_by = @ModifierLogin
 where login = @Login
@@ -116,8 +114,7 @@ where login = @Login
     {
         const string sqlQuery = @"
 update 
-    aton_user set 
-                  login = @NewLogin,
+    aton_user set login = @NewLogin,
                   modified_on = CURRENT_TIMESTAMP,
                   modified_by = @ModifierLogin
 where login = @Login
