@@ -20,12 +20,72 @@ public class UpdateUserController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpPost]
-    public async Task<CreateResponse> Update(
+    [HttpPost("info")]
+    public async Task UpdateUserInfo(
+        UpdateUserInfoRequest request,
         CancellationToken ct)
     {
-        throw new NotImplementedException();
+        var query = new UpdateUserInfoCommand(
+            new Principal(
+                request.Principal.Login,
+                request.Principal.Password
+            ),
+            request.UserLogin,
+            request.Name,
+            request.Gender,
+            request.Birthday
+        );
 
+        await _mediator.Send(query, ct);
     }
 
+    [HttpPost("login")]
+    public async Task UpdateUserLogin(
+        UpdateUserLoginRequest request,
+        CancellationToken ct)
+    {
+        var query = new UpdateUserLoginCommand(
+            new Principal(
+                request.Principal.Login,
+                request.Principal.Password
+            ),
+            request.OldLogin,
+            request.NewLogin
+        );
+        
+        await _mediator.Send(query, ct);
+    }
+
+    [HttpPost("password")]
+    public async Task UpdateUserPassword(
+        UpdateUserPasswordRequest request,
+        CancellationToken ct)
+    {
+        var query = new UpdateUserPasswordCommand(
+            new Principal(
+                request.Principal.Login,
+                request.Principal.Password
+            ),
+            request.UserLogin,
+            request.NewPassword
+        );
+        
+        await _mediator.Send(query, ct);
+    }
+
+    [HttpPatch("restore")]
+    public async Task RestoreUser(
+        RestoreUserRequest request,
+        CancellationToken ct)
+    {
+        var query = new RestoreUserCommand(
+            new Principal(
+                request.Principal.Login,
+                request.Principal.Password
+            ),
+            request.UserLogin
+        );
+
+        await _mediator.Send(query, ct);
+    }
 }

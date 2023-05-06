@@ -1,9 +1,5 @@
 ﻿using System.Security.Cryptography;
-using Aton.UserManagement.Bll.Exceptions;
-using Aton.UserManagement.Bll.Models;
 using Aton.UserManagement.Bll.Services.Interfaces;
-using Aton.UserManagement.Dal.Entities;
-using Aton.UserManagement.Dal.Repositories;
 using Aton.UserManagement.Dal.Repositories.Interfaces;
 using UserModel = Aton.UserManagement.Bll.Models.UserModel;
 
@@ -132,6 +128,35 @@ public class UserManagementService : IUserManagementService
     {
         using var transaction = _usersRepository.CreateTransactionScope();
         await _usersRepository.Revoke(revokerLogin, login, cancellationToken);
+        transaction.Complete();
+    }
+
+    public async Task Restore(string restorerLogin, string login, CancellationToken cancellationToken)
+    {
+        using var transaction = _usersRepository.CreateTransactionScope();
+        await _usersRepository.Restore(restorerLogin, login, cancellationToken);
+        transaction.Complete();
+    }
+
+    public async Task UpdateUserInfo(string modifierLogin, string userLogin, string name, int gender, DateTime? birthday,
+        CancellationToken cancellationToken)
+    {
+        using var transaction = _usersRepository.CreateTransactionScope();
+        await _usersRepository.UpdateUserInfo(modifierLogin, userLogin, name, gender, birthday, cancellationToken);
+        transaction.Complete();
+    }
+
+    public async Task UpdateUserPassword(string modifierLogin, string userLogin, string password, CancellationToken cancellationToken)
+    {
+        using var transaction = _usersRepository.CreateTransactionScope();
+        await _usersRepository.UpdateUserPassword(modifierLogin, userLogin, ComputeHash(password), cancellationToken);
+        transaction.Complete();    
+    }
+
+    public async Task UpdateUserLogin(string modifierLogin, string oldLogin, string newLogin, CancellationToken cancellationToken)
+    {
+        using var transaction = _usersRepository.CreateTransactionScope();
+        await _usersRepository.UpdateUserLogin(modifierLogin, oldLogin, newLogin, cancellationToken);
         transaction.Complete();
     }
 

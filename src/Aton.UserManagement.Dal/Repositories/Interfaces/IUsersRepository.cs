@@ -9,12 +9,27 @@ public interface IUsersRepository : IDbRepository
         string ownerLogin,
         UserModel user,
         CancellationToken token);
-    
-    Task<int> Update(
+
+    Task UpdateUserInfo(
         string modifierLogin,
-        UserModel user,
+        string userLogin,
+        string name,
+        int gender,
+        DateTime? birthday,
         CancellationToken token);
-    
+
+    Task UpdateUserPassword(
+        string modifierLogin,
+        string userLogin,
+        string password,
+        CancellationToken token);
+
+    Task UpdateUserLogin(
+        string modifierLogin,
+        string oldLogin,
+        string newLogin,
+        CancellationToken token);
+
     Task<UserEntityV1[]> GetAllActiveUsers(
         CancellationToken token);
 
@@ -25,17 +40,18 @@ public interface IUsersRepository : IDbRepository
     Task<UserEntityV1[]> GetOlderThan(
         int age,
         CancellationToken token);
-    
+
     Task Delete(
         string login,
         CancellationToken cancellationToken);
 
-    Task Revoke( // soft delete
+    Task Revoke(
         string revokerLogin,
         string login,
         CancellationToken cancellationToken);
-    
-    Task<int> Restore( // update2
+
+    Task Restore(
+        string modifierLogin,
         string login,
         CancellationToken token);
 }

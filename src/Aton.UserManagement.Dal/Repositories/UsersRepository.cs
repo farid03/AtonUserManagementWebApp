@@ -9,7 +9,6 @@ namespace Aton.UserManagement.Dal.Repositories;
 
 public class UsersRepository : BaseRepository, IUsersRepository
 {
-    // TODO
     public UsersRepository(
         IOptions<DalOptions> dalSettings) : base(dalSettings.Value)
     {
@@ -43,9 +42,100 @@ returning guid;
         return ids.First();
     }
 
-    public Task<int> Update(string modifierLogin, UserModel user, CancellationToken token)
+    public async Task UpdateUserInfo(
+        string modifierLogin, 
+        string userLogin, 
+        string name, 
+        int gender, 
+        DateTime? birthday, 
+        CancellationToken token)
     {
-        throw new NotImplementedException();
+        const string sqlQuery = @"
+update 
+    aton_user set 
+                  name = @Name,
+                  gender = @Gender,
+                  birthday = @Birthday,
+                  modified_on = CURRENT_TIMESTAMP,
+                  modified_by = @ModifierLogin
+where login = @Login
+";
+        var sqlQueryParams = new
+        {
+            Name = name,
+            Gender = gender,
+            Birthday = birthday,
+            ModifierLogin = modifierLogin,
+            Login = userLogin
+        };
+
+        await using var connection = await GetAndOpenConnection();
+
+        await connection.QueryAsync(
+            new CommandDefinition(
+                sqlQuery,
+                sqlQueryParams,
+                cancellationToken: token));    
+    }
+    
+    public async Task UpdateUserPassword(
+        string modifierLogin, 
+        string userLogin, 
+        string password, 
+        CancellationToken token)
+    {
+        const string sqlQuery = @"
+update 
+    aton_user set 
+                  password = @Password,
+                  modified_on = CURRENT_TIMESTAMP,
+                  modified_by = @ModifierLogin
+where login = @Login
+";
+        var sqlQueryParams = new
+        {
+            Password = password,
+            ModifierLogin = modifierLogin,
+            Login = userLogin
+        };
+
+        await using var connection = await GetAndOpenConnection();
+
+        await connection.QueryAsync(
+            new CommandDefinition(
+                sqlQuery,
+                sqlQueryParams,
+                cancellationToken: token));    
+    }
+    
+    public async Task UpdateUserLogin(
+        string modifierLogin, 
+        string oldLogin, 
+        string newLogin, 
+        CancellationToken token)
+    {
+        const string sqlQuery = @"
+update 
+    aton_user set 
+                  login = @NewLogin,
+                  modified_on = CURRENT_TIMESTAMP,
+                  modified_by = @ModifierLogin
+where login = @Login
+";
+        var sqlQueryParams = new
+        {
+            NewLogin = newLogin,
+            ModifierLogin = modifierLogin,
+            Login = oldLogin
+        };
+
+        await using var connection = await GetAndOpenConnection();
+
+        await connection.QueryAsync(
+            new CommandDefinition(
+                sqlQuery,
+                sqlQueryParams,
+                cancellationToken: token));    
     }
 
     public async Task<UserEntityV1[]> GetAllActiveUsers(CancellationToken token)
@@ -174,8 +264,28 @@ where login = @Login
                 cancellationToken: token));
     }
 
-    public Task<int> Restore(string login, CancellationToken token)
+    public async Task Restore(string modifierLogin, string login, CancellationToken token)
     {
-        throw new NotImplementedException();
+        const string sqlQuery = @"
+update 
+    aton_user set modified_on = CURRENT_TIMESTAMP,
+                  modified_by = @ModifierLogin,
+                  revoked_on = null, 
+                  revoked_by = null
+where login = @Login
+";
+        var sqlQueryParams = new
+        {
+            Login = login,
+            ModifierLogin = modifierLogin,
+        };
+
+        await using var connection = await GetAndOpenConnection();
+
+        await connection.QueryAsync(
+            new CommandDefinition(
+                sqlQuery,
+                sqlQueryParams,
+                cancellationToken: token));
     }
 }

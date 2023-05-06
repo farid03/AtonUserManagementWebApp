@@ -61,3 +61,12 @@ POST /v1/create
         or FluentValidationException
 => 403 ForbiddenException
 ```
+
+// TODO
+- [ ] реализовать и вручную протестировать оставшиеся методы в следующеи порядке:
+  - read
+  - delete
+  - update
+- [ ] общий рефакторинг проекта
+  - md5 hash module
+- [ ] дописать readme
