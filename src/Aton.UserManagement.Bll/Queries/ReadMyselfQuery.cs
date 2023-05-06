@@ -28,9 +28,6 @@ public class ReadMyselfQueryHandler
         ReadMyselfQuery query,
         CancellationToken cancellationToken)
     {
-        if (!await _authorizationService.IsAdminUser(query.Principal, cancellationToken))
-            throw new ForbiddenException();
-
         if (!await _authorizationService.IsActivePrincipal(query.Principal, cancellationToken))
             throw new ForbiddenException();
 
