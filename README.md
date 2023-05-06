@@ -12,30 +12,29 @@ Web API сервис реализующий API методы CRUD над
     login: admin 
     password: password
     ```
-    от имени которого можно производить начальные действия.
+  от имени которого можно производить начальные действия.
 
 ## Сборка и запуск
 
 Базы данных:
+
 ```shell
 docker compose up -d
 ```
 
-Web API: [status: in development]
+Web API:
+
 ```shell
 dotnet run --project src/Aton.UserManagement.Api/Aton.UserManagement.Api.csproj
-```
-
-gRPC API: [status: in development]
-```shell
-dotnet run --project src/Aton.UserManagement.Api/Aton.UserManagement.gRPC.Api.csproj
 ```
 
 ## API
 
 ### Create
+
 Создание пользователя по указанным параметрам.
 > Доступно только администраторам.
+
 ```
 POST /v1/create
 <= {
@@ -61,12 +60,3 @@ POST /v1/create
         or FluentValidationException
 => 403 ForbiddenException
 ```
-
-// TODO
-- [ ] реализовать и вручную протестировать оставшиеся методы в следующеи порядке:
-  - read
-  - delete
-  - update
-- [ ] общий рефакторинг проекта
-  - md5 hash module
-- [ ] дописать readme

@@ -1,7 +1,7 @@
-using Aton.UserManagement.Bll.Extensions;
-using Aton.UserManagement.Dal.Extensions;
 using Aton.UserManagement.Api.Middleware;
 using Aton.UserManagement.Api.NamingPolicies;
+using Aton.UserManagement.Bll.Extensions;
+using Aton.UserManagement.Dal.Extensions;
 using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);

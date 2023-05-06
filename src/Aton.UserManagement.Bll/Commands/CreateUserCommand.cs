@@ -1,5 +1,4 @@
 using Aton.UserManagement.Bll.Exceptions;
-using Aton.UserManagement.Bll.Extensions;
 using Aton.UserManagement.Bll.Models;
 using Aton.UserManagement.Bll.Services;
 using Aton.UserManagement.Bll.Services.Interfaces;
@@ -15,8 +14,8 @@ public record CreateUserCommand(
 public class CreateUserCommandHandler
     : IRequestHandler<CreateUserCommand, int>
 {
+    private readonly IAuthorizationService _authorizationService;
     private readonly IUserManagementService _userManagementService;
-    private readonly AuthorizationService _authorizationService;
 
     public CreateUserCommandHandler(
         IUserManagementService userManagementService,

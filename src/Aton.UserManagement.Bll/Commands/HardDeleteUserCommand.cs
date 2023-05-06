@@ -1,5 +1,4 @@
 using Aton.UserManagement.Bll.Exceptions;
-using Aton.UserManagement.Bll.Extensions;
 using Aton.UserManagement.Bll.Models;
 using Aton.UserManagement.Bll.Services;
 using Aton.UserManagement.Bll.Services.Interfaces;
@@ -15,8 +14,8 @@ public record HardDeleteUserCommand(
 public class HardDeleteUserCommandHandler
     : IRequestHandler<HardDeleteUserCommand>
 {
+    private readonly IAuthorizationService _authorizationService;
     private readonly IUserManagementService _userManagementService;
-    private readonly AuthorizationService _authorizationService;
 
     public HardDeleteUserCommandHandler(
         IUserManagementService userManagementService,
@@ -32,7 +31,7 @@ public class HardDeleteUserCommandHandler
     {
         if (!await _authorizationService.IsAdminUser(command.Principal, cancellationToken))
             throw new ForbiddenException();
-        
+
         await _userManagementService.Delete(
             command.Login,
             cancellationToken);

@@ -36,7 +36,6 @@ DELETE FROM aton_user WHERE login = 'admin'
         Execute.Sql(sql);
     }
 
-    // TODO кажется можно вынести в более разумное место
     private string ComputeHash(string inputString)
     {
         using var md5 = MD5.Create();

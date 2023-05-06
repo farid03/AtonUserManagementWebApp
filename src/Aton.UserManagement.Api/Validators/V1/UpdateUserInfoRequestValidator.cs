@@ -8,7 +8,7 @@ public class UpdateUserInfoRequestValidator : AbstractValidator<UpdateUserInfoRe
     public UpdateUserInfoRequestValidator()
     {
         var msg = "Ошибка в поле {PropertyName}: значение {PropertyValue}";
-        
+
         RuleFor(x => x.UserLogin)
             .Length(1, 30)
             .Matches(@"^[a-zA-Z0-9]+$")

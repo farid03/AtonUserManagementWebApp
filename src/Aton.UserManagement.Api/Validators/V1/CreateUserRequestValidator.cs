@@ -5,11 +5,10 @@ namespace Aton.UserManagement.Api.Validators.V1;
 
 public class CreateUserRequestValidator : AbstractValidator<CreateUserRequest>
 {
-// TODO добавить валидаторы на все (на основе того, что написано в тз)
     public CreateUserRequestValidator()
     {
         var msg = "Ошибка в поле {PropertyName}: значение {PropertyValue}";
-        
+
         RuleFor(x => x.UserToCreate.Login)
             .Length(1, 30)
             .Matches(@"^[a-zA-Z0-9]+$")
@@ -19,7 +18,7 @@ public class CreateUserRequestValidator : AbstractValidator<CreateUserRequest>
             .Length(1, 30)
             .Matches(@"^[a-zA-Z0-9]+$")
             .WithMessage(msg);
-        
+
         RuleFor(x => x.UserToCreate.Name)
             .Length(1, 30)
             .Matches(@"^[a-zA-Zа-яА-Я]+$")

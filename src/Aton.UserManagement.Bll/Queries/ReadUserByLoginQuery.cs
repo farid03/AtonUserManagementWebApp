@@ -1,4 +1,3 @@
-using Aton.UserManagement.Bll.Commands;
 using Aton.UserManagement.Bll.Exceptions;
 using Aton.UserManagement.Bll.Models;
 using Aton.UserManagement.Bll.Services;
@@ -15,8 +14,8 @@ public record ReadUserByLoginQuery(
 public class ReadUserByLoginQueryHandler
     : IRequestHandler<ReadUserByLoginQuery, UserModel>
 {
+    private readonly IAuthorizationService _authorizationService;
     private readonly IUserManagementService _userManagementService;
-    private readonly AuthorizationService _authorizationService;
 
     public ReadUserByLoginQueryHandler(
         IUserManagementService userManagementService,
@@ -25,19 +24,21 @@ public class ReadUserByLoginQueryHandler
         _userManagementService = userManagementService;
         _authorizationService = authorizationService;
     }
-    
-    public async Task<UserModel> Handle(ReadUserByLoginQuery query, CancellationToken cancellationToken)
+
+    public async Task<UserModel> Handle(
+        ReadUserByLoginQuery query,
+        CancellationToken cancellationToken)
     {
         if (!await _authorizationService.IsAdminUser(query.Principal, cancellationToken))
             throw new ForbiddenException();
-        
+
         var user = await _userManagementService.GetUserByLogin(
             query.UserLogin,
             cancellationToken);
 
         if (user is null)
             throw new UserNotFoundException();
-        
+
         return user;
     }
 }

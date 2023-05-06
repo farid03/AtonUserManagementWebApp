@@ -13,6 +13,6 @@ public record UserModel
     public DateTime? Birthday { get; init; }
 
     public bool Admin { get; init; }
-    
+
     public DateTime? RevokedOn { get; init; }
 }

@@ -1,8 +1,6 @@
-using Aton.UserManagement.Api.Responses.V1;
+using Aton.UserManagement.Api.Requests.V1;
 using Aton.UserManagement.Bll.Commands;
 using Aton.UserManagement.Bll.Models;
-using Aton.UserManagement.Bll.Queries;
-using Aton.UserManagement.Api.Requests.V1;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -52,7 +50,7 @@ public class UpdateUserController : ControllerBase
             request.OldLogin,
             request.NewLogin
         );
-        
+
         await _mediator.Send(query, ct);
     }
 
@@ -69,7 +67,7 @@ public class UpdateUserController : ControllerBase
             request.UserLogin,
             request.NewPassword
         );
-        
+
         await _mediator.Send(query, ct);
     }
 

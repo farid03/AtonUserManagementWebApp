@@ -16,7 +16,7 @@ public class UpdateUserLoginCommandHandler
     : IRequestHandler<UpdateUserLoginCommand>
 {
     private readonly IUserManagementService _userManagementService;
-    private readonly AuthorizationService _authorizationService;
+    private readonly IAuthorizationService _authorizationService;
 
     public UpdateUserLoginCommandHandler(
         IUserManagementService userManagementService,

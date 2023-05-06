@@ -15,8 +15,8 @@ public record UpdateUserPasswordCommand(
 public class UpdateUserPasswordCommandHandler
     : IRequestHandler<UpdateUserPasswordCommand>
 {
+    private readonly IAuthorizationService _authorizationService;
     private readonly IUserManagementService _userManagementService;
-    private readonly AuthorizationService _authorizationService;
 
     public UpdateUserPasswordCommandHandler(
         IUserManagementService userManagementService,

@@ -10,8 +10,8 @@ public static class ServiceCollectionExtensions
     {
         services.AddMediatR(c => c.RegisterServicesFromAssembly(typeof(ServiceCollectionExtensions).Assembly));
         services.AddTransient<IUserManagementService, UserManagementService>();
-        services.AddTransient<AuthorizationService>();
-// TODO добавить новые сервисы
+        services.AddTransient<IAuthorizationService, AuthorizationService>();
+
         return services;
     }
 }

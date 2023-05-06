@@ -26,7 +26,7 @@ public class ExceptionHandlerMiddleware
                 response.StatusCode = 403;
             else
                 response.StatusCode = 500;
-            
+
             context.Response.ContentType = "text/plain";
             await response.WriteAsync($"{exception.GetType().FullName} {exception.Message}");
         }

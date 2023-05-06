@@ -8,7 +8,7 @@ public class UpdateUserPasswordRequestValidator : AbstractValidator<UpdateUserPa
     public UpdateUserPasswordRequestValidator()
     {
         var msg = "Ошибка в поле {PropertyName}: значение {PropertyValue}";
-        
+
         RuleFor(x => x.NewPassword)
             .Length(1, 30)
             .Matches(@"^[a-zA-Z0-9]+$")

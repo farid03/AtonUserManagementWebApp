@@ -1,4 +1,3 @@
-using Aton.UserManagement.Bll.Commands;
 using Aton.UserManagement.Bll.Exceptions;
 using Aton.UserManagement.Bll.Models;
 using Aton.UserManagement.Bll.Services;
@@ -14,8 +13,8 @@ public record ReadMyselfQuery(
 public class ReadMyselfQueryHandler
     : IRequestHandler<ReadMyselfQuery, UserModel>
 {
+    private readonly IAuthorizationService _authorizationService;
     private readonly IUserManagementService _userManagementService;
-    private readonly AuthorizationService _authorizationService;
 
     public ReadMyselfQueryHandler(
         IUserManagementService userManagementService,
@@ -25,14 +24,16 @@ public class ReadMyselfQueryHandler
         _authorizationService = authorizationService;
     }
 
-    public async Task<UserModel> Handle(ReadMyselfQuery query, CancellationToken cancellationToken)
+    public async Task<UserModel> Handle(
+        ReadMyselfQuery query,
+        CancellationToken cancellationToken)
     {
         if (!await _authorizationService.IsAdminUser(query.Principal, cancellationToken))
             throw new ForbiddenException();
 
         if (!await _authorizationService.IsActivePrincipal(query.Principal, cancellationToken))
             throw new ForbiddenException();
-        
+
         var user = await _userManagementService.GetUserByLogin(
             query.Principal.Login,
             cancellationToken);

@@ -1,7 +1,8 @@
 ﻿using System.Security.Cryptography;
+using System.Text;
+using Aton.UserManagement.Bll.Models;
 using Aton.UserManagement.Bll.Services.Interfaces;
 using Aton.UserManagement.Dal.Repositories.Interfaces;
-using UserModel = Aton.UserManagement.Bll.Models.UserModel;
 
 namespace Aton.UserManagement.Bll.Services;
 
@@ -21,14 +22,14 @@ public class UserManagementService : IUserManagementService
     {
         using var transaction = _usersRepository.CreateTransactionScope();
 
-        var newUser = new Dal.Models.UserModel()
+        var newUser = new Dal.Models.UserModel
         {
             Login = user.Login,
             Password = ComputeHash(user.Password),
             Name = user.Name,
             Gender = user.Gender,
             Birthday = user.Birthday,
-            Admin = user.Admin,
+            Admin = user.Admin
         };
 
         var guid = await _usersRepository.Add(principalLogin, newUser, cancellationToken);
@@ -49,7 +50,9 @@ public class UserManagementService : IUserManagementService
         return user is null;
     }
 
-    public async Task<UserModel?> GetUserByLogin(string login, CancellationToken cancellationToken)
+    public async Task<UserModel?> GetUserByLogin(
+        string login,
+        CancellationToken cancellationToken)
     {
         using var transaction = _usersRepository.CreateTransactionScope();
         var user = await _usersRepository.Get(login, cancellationToken);
@@ -70,45 +73,23 @@ public class UserManagementService : IUserManagementService
 
         return result;
     }
-    
-    public async Task<UserModel[]> GetActiveUsers(CancellationToken cancellationToken)
+
+    public async Task<UserModel[]> GetActiveUsers(
+        CancellationToken cancellationToken)
     {
         using var transaction = _usersRepository.CreateTransactionScope();
         var users = await _usersRepository.GetAllActiveUsers(cancellationToken);
         transaction.Complete();
 
         var result = users
-            .Select( x => 
+            .Select(x =>
                 new UserModel(
-                    x.Login, 
-                    x.Password, 
-                    x.Name, 
-                    x.Gender, 
-                    x.Birthday, 
-                    x.Admin, 
-                    x.RevokedOn is null
-                    )
-            )
-            .ToArray();
-
-        return result;
-    }
-    
-    public async Task<UserModel[]> GetOlderThan(int age, CancellationToken cancellationToken)
-    {
-        using var transaction = _usersRepository.CreateTransactionScope();
-        var users = await _usersRepository.GetOlderThan(age, cancellationToken);
-        transaction.Complete();
-
-        var result = users
-            .Select( x => 
-                new UserModel(
-                    x.Login, 
-                    x.Password, 
-                    x.Name, 
-                    x.Gender, 
-                    x.Birthday, 
-                    x.Admin, 
+                    x.Login,
+                    x.Password,
+                    x.Name,
+                    x.Gender,
+                    x.Birthday,
+                    x.Admin,
                     x.RevokedOn is null
                 )
             )
@@ -117,28 +98,66 @@ public class UserManagementService : IUserManagementService
         return result;
     }
 
-    public async Task Delete(string login, CancellationToken cancellationToken)
+    public async Task<UserModel[]> GetOlderThan(
+        int age,
+        CancellationToken cancellationToken)
+    {
+        using var transaction = _usersRepository.CreateTransactionScope();
+        var users = await _usersRepository.GetOlderThan(age, cancellationToken);
+        transaction.Complete();
+
+        var result = users
+            .Select(x =>
+                new UserModel(
+                    x.Login,
+                    x.Password,
+                    x.Name,
+                    x.Gender,
+                    x.Birthday,
+                    x.Admin,
+                    x.RevokedOn is null
+                )
+            )
+            .ToArray();
+
+        return result;
+    }
+
+    public async Task Delete(
+        string login,
+        CancellationToken cancellationToken)
     {
         using var transaction = _usersRepository.CreateTransactionScope();
         await _usersRepository.Delete(login, cancellationToken);
         transaction.Complete();
     }
-    
-    public async Task Revoke(string revokerLogin, string login, CancellationToken cancellationToken)
+
+    public async Task Revoke(
+        string revokerLogin,
+        string login,
+        CancellationToken cancellationToken)
     {
         using var transaction = _usersRepository.CreateTransactionScope();
         await _usersRepository.Revoke(revokerLogin, login, cancellationToken);
         transaction.Complete();
     }
 
-    public async Task Restore(string restorerLogin, string login, CancellationToken cancellationToken)
+    public async Task Restore(
+        string restorerLogin,
+        string login,
+        CancellationToken cancellationToken)
     {
         using var transaction = _usersRepository.CreateTransactionScope();
         await _usersRepository.Restore(restorerLogin, login, cancellationToken);
         transaction.Complete();
     }
 
-    public async Task UpdateUserInfo(string modifierLogin, string userLogin, string name, int gender, DateTime? birthday,
+    public async Task UpdateUserInfo(
+        string modifierLogin,
+        string userLogin,
+        string name,
+        int gender,
+        DateTime? birthday,
         CancellationToken cancellationToken)
     {
         using var transaction = _usersRepository.CreateTransactionScope();
@@ -146,14 +165,22 @@ public class UserManagementService : IUserManagementService
         transaction.Complete();
     }
 
-    public async Task UpdateUserPassword(string modifierLogin, string userLogin, string password, CancellationToken cancellationToken)
+    public async Task UpdateUserPassword(
+        string modifierLogin,
+        string userLogin,
+        string password,
+        CancellationToken cancellationToken)
     {
         using var transaction = _usersRepository.CreateTransactionScope();
         await _usersRepository.UpdateUserPassword(modifierLogin, userLogin, ComputeHash(password), cancellationToken);
-        transaction.Complete();    
+        transaction.Complete();
     }
 
-    public async Task UpdateUserLogin(string modifierLogin, string oldLogin, string newLogin, CancellationToken cancellationToken)
+    public async Task UpdateUserLogin(
+        string modifierLogin,
+        string oldLogin,
+        string newLogin,
+        CancellationToken cancellationToken)
     {
         using var transaction = _usersRepository.CreateTransactionScope();
         await _usersRepository.UpdateUserLogin(modifierLogin, oldLogin, newLogin, cancellationToken);
@@ -164,7 +191,7 @@ public class UserManagementService : IUserManagementService
     {
         using var md5 = MD5.Create();
 
-        var data = System.Text.Encoding.ASCII.GetBytes(inputString);
+        var data = Encoding.ASCII.GetBytes(inputString);
         data = md5.ComputeHash(data);
         var hash = Convert.ToBase64String(data);
 

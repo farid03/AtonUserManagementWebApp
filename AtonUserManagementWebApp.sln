@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aton.UserManagement.Dal", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aton.UserManagement.Bll", "src\Aton.UserManagement.Bll\Aton.UserManagement.Bll.csproj", "{EFA050F1-DE1F-41C8-9A48-9571B74F921B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aton.UserManagement.gRPC.Api", "src\Aton.UserManagement.gRPC.Api\Aton.UserManagement.gRPC.Api.csproj", "{B0C82FB9-3CE9-4A48-99AF-301D45947B78}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{BD08B317-F09B-4C4F-9552-CD4323D3610F}"
 	ProjectSection(SolutionItems) = preProject
 		docker-compose.yml = docker-compose.yml
@@ -40,15 +38,10 @@ Global
 		{EFA050F1-DE1F-41C8-9A48-9571B74F921B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFA050F1-DE1F-41C8-9A48-9571B74F921B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFA050F1-DE1F-41C8-9A48-9571B74F921B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B0C82FB9-3CE9-4A48-99AF-301D45947B78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B0C82FB9-3CE9-4A48-99AF-301D45947B78}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B0C82FB9-3CE9-4A48-99AF-301D45947B78}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B0C82FB9-3CE9-4A48-99AF-301D45947B78}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A81B5635-C0CA-4AA2-AD1D-D91288A2C43A} = {66F59723-311B-4F39-80B5-DA3070F4309F}
 		{0AFAE29D-045E-468B-AFFF-4D3630906776} = {66F59723-311B-4F39-80B5-DA3070F4309F}
 		{EFA050F1-DE1F-41C8-9A48-9571B74F921B} = {66F59723-311B-4F39-80B5-DA3070F4309F}
-		{B0C82FB9-3CE9-4A48-99AF-301D45947B78} = {66F59723-311B-4F39-80B5-DA3070F4309F}
 	EndGlobalSection
 EndGlobal

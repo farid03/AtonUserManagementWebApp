@@ -8,7 +8,7 @@ public class UpdateUserLoginRequestValidator : AbstractValidator<UpdateUserLogin
     public UpdateUserLoginRequestValidator()
     {
         var msg = "Ошибка в поле {PropertyName}: значение {PropertyValue}";
-        
+
         RuleFor(x => x.NewLogin)
             .Length(1, 30)
             .Matches(@"^[a-zA-Z0-9]+$")

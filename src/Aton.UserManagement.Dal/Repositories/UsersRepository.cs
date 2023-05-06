@@ -23,13 +23,13 @@ returning guid;
 ";
         var sqlQueryParams = new
         {
-            Login = user.Login,
-            Password = user.Password,
-            Name = user.Name,
-            Gender = user.Gender,
-            Birthday = user.Birthday,
-            Admin = user.Admin,
-            CreatedBy = ownerLogin,
+            user.Login,
+            user.Password,
+            user.Name,
+            user.Gender,
+            user.Birthday,
+            user.Admin,
+            CreatedBy = ownerLogin
         };
 
         await using var connection = await GetAndOpenConnection();
@@ -43,11 +43,11 @@ returning guid;
     }
 
     public async Task UpdateUserInfo(
-        string modifierLogin, 
-        string userLogin, 
-        string name, 
-        int gender, 
-        DateTime? birthday, 
+        string modifierLogin,
+        string userLogin,
+        string name,
+        int gender,
+        DateTime? birthday,
         CancellationToken token)
     {
         const string sqlQuery = @"
@@ -75,13 +75,13 @@ where login = @Login
             new CommandDefinition(
                 sqlQuery,
                 sqlQueryParams,
-                cancellationToken: token));    
+                cancellationToken: token));
     }
-    
+
     public async Task UpdateUserPassword(
-        string modifierLogin, 
-        string userLogin, 
-        string password, 
+        string modifierLogin,
+        string userLogin,
+        string password,
         CancellationToken token)
     {
         const string sqlQuery = @"
@@ -105,13 +105,13 @@ where login = @Login
             new CommandDefinition(
                 sqlQuery,
                 sqlQueryParams,
-                cancellationToken: token));    
+                cancellationToken: token));
     }
-    
+
     public async Task UpdateUserLogin(
-        string modifierLogin, 
-        string oldLogin, 
-        string newLogin, 
+        string modifierLogin,
+        string oldLogin,
+        string newLogin,
         CancellationToken token)
     {
         const string sqlQuery = @"
@@ -135,7 +135,7 @@ where login = @Login
             new CommandDefinition(
                 sqlQuery,
                 sqlQueryParams,
-                cancellationToken: token));    
+                cancellationToken: token));
     }
 
     public async Task<UserEntityV1[]> GetAllActiveUsers(CancellationToken token)
@@ -178,7 +178,7 @@ where login = @Login
 ";
         var sqlQueryParams = new
         {
-            Login = login,
+            Login = login
         };
 
         await using var connection = await GetAndOpenConnection();
@@ -208,7 +208,7 @@ order by created_on
 ";
         var sqlQueryParams = new
         {
-            LimitAge = age,
+            LimitAge = age
         };
 
         await using var connection = await GetAndOpenConnection();
@@ -229,7 +229,7 @@ where login = @Login
 ";
         var sqlQueryParams = new
         {
-            Login = login,
+            Login = login
         };
 
         await using var connection = await GetAndOpenConnection();
@@ -252,7 +252,7 @@ where login = @Login
         var sqlQueryParams = new
         {
             Login = login,
-            RevokerLogin = revokerLogin,
+            RevokerLogin = revokerLogin
         };
 
         await using var connection = await GetAndOpenConnection();
@@ -277,7 +277,7 @@ where login = @Login
         var sqlQueryParams = new
         {
             Login = login,
-            ModifierLogin = modifierLogin,
+            ModifierLogin = modifierLogin
         };
 
         await using var connection = await GetAndOpenConnection();
