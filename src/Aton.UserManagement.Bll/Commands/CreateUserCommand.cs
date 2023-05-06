@@ -19,7 +19,7 @@ public class CreateUserCommandHandler
 
     public CreateUserCommandHandler(
         IUserManagementService userManagementService,
-        AuthorizationService authorizationService)
+        IAuthorizationService authorizationService)
     {
         _userManagementService = userManagementService;
         _authorizationService = authorizationService;

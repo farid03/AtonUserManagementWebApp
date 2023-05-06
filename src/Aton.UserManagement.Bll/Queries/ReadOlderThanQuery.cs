@@ -19,7 +19,7 @@ public class ReadOlderThanQueryHandler
 
     public ReadOlderThanQueryHandler(
         IUserManagementService userManagementService,
-        AuthorizationService authorizationService)
+        IAuthorizationService authorizationService)
     {
         _userManagementService = userManagementService;
         _authorizationService = authorizationService;

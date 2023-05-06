@@ -19,7 +19,7 @@ public class ReadUserByLoginQueryHandler
 
     public ReadUserByLoginQueryHandler(
         IUserManagementService userManagementService,
-        AuthorizationService authorizationService)
+        IAuthorizationService authorizationService)
     {
         _userManagementService = userManagementService;
         _authorizationService = authorizationService;

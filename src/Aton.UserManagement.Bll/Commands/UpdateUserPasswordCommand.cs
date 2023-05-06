@@ -20,7 +20,7 @@ public class UpdateUserPasswordCommandHandler
 
     public UpdateUserPasswordCommandHandler(
         IUserManagementService userManagementService,
-        AuthorizationService authorizationService)
+        IAuthorizationService authorizationService)
     {
         _userManagementService = userManagementService;
         _authorizationService = authorizationService;
@@ -35,6 +35,9 @@ public class UpdateUserPasswordCommandHandler
                  && command.Principal.Login.Equals(command.UserLogin)))
             throw new ForbiddenException();
 
+        if (await _userManagementService.IsLoginFree(command.UserLogin, cancellationToken))
+            throw new UserNotFoundException();
+        
         await _userManagementService.UpdateUserPassword(
             command.Principal.Login,
             command.UserLogin,

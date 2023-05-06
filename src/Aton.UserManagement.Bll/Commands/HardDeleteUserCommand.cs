@@ -19,7 +19,7 @@ public class HardDeleteUserCommandHandler
 
     public HardDeleteUserCommandHandler(
         IUserManagementService userManagementService,
-        AuthorizationService authorizationService)
+        IAuthorizationService authorizationService)
     {
         _userManagementService = userManagementService;
         _authorizationService = authorizationService;
@@ -32,6 +32,9 @@ public class HardDeleteUserCommandHandler
         if (!await _authorizationService.IsAdminUser(command.Principal, cancellationToken))
             throw new ForbiddenException();
 
+        if (await _userManagementService.IsLoginFree(command.Login, cancellationToken))
+            throw new UserNotFoundException();
+        
         await _userManagementService.Delete(
             command.Login,
             cancellationToken);

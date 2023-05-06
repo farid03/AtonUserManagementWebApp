@@ -20,7 +20,7 @@ public class UpdateUserLoginCommandHandler
 
     public UpdateUserLoginCommandHandler(
         IUserManagementService userManagementService,
-        AuthorizationService authorizationService)
+        IAuthorizationService authorizationService)
     {
         _userManagementService = userManagementService;
         _authorizationService = authorizationService;
@@ -35,6 +35,9 @@ public class UpdateUserLoginCommandHandler
                  && command.Principal.Login.Equals(command.OldLogin)))
             throw new ForbiddenException();
 
+        if (await _userManagementService.IsLoginFree(command.OldLogin, cancellationToken))
+            throw new UserNotFoundException();
+        
         if (!await _userManagementService.IsLoginFree(command.NewLogin, cancellationToken))
             throw new LoginAlreadyExistsException();
 

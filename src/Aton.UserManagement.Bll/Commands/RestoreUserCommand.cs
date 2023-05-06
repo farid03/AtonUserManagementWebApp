@@ -20,7 +20,7 @@ public class RestoreUserCommandHandler
 
     public RestoreUserCommandHandler(
         IUserManagementService userManagementService,
-        AuthorizationService authorizationService)
+        IAuthorizationService authorizationService)
     {
         _userManagementService = userManagementService;
         _authorizationService = authorizationService;
@@ -32,6 +32,9 @@ public class RestoreUserCommandHandler
     {
         if (!await _authorizationService.IsAdminUser(command.Principal, cancellationToken))
             throw new ForbiddenException();
+        
+        if (await _userManagementService.IsLoginFree(command.Login, cancellationToken))
+            throw new UserNotFoundException();
         
         await _userManagementService.Restore(
             command.Principal.Login,

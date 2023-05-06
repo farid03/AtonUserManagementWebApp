@@ -18,7 +18,7 @@ public class ReadMyselfQueryHandler
 
     public ReadMyselfQueryHandler(
         IUserManagementService userManagementService,
-        AuthorizationService authorizationService)
+        IAuthorizationService authorizationService)
     {
         _userManagementService = userManagementService;
         _authorizationService = authorizationService;

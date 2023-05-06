@@ -18,7 +18,7 @@ public class ReadAllActiveUsersQueryHandler
 
     public ReadAllActiveUsersQueryHandler(
         IUserManagementService userManagementService,
-        AuthorizationService authorizationService)
+        IAuthorizationService authorizationService)
     {
         _userManagementService = userManagementService;
         _authorizationService = authorizationService;

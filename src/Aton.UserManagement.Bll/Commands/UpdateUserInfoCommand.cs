@@ -22,7 +22,7 @@ public class UpdateUserInfoCommandHandler
 
     public UpdateUserInfoCommandHandler(
         IUserManagementService userManagementService,
-        AuthorizationService authorizationService)
+        IAuthorizationService authorizationService)
     {
         _userManagementService = userManagementService;
         _authorizationService = authorizationService;
@@ -37,6 +37,9 @@ public class UpdateUserInfoCommandHandler
                  && command.Principal.Login.Equals(command.UserLogin)))
             throw new ForbiddenException();
 
+        if (await _userManagementService.IsLoginFree(command.UserLogin, cancellationToken))
+            throw new UserNotFoundException();
+        
         await _userManagementService.UpdateUserInfo(
             command.Principal.Login,
             command.UserLogin,
